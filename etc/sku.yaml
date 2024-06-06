@@ -1,0 +1,18 @@
+Name: sku.rpc
+ListenOn: 0.0.0.0:8090
+Nacos:
+  Host: 127.0.0.1
+  Port: 9848
+  Namespace: c2b3cfff-e8bd-4066-ae52-648a8eb6ceeb
+  Group: wechat-merchant
+#  Cluster: CLUSTER_NAME
+
+#链路追踪
+Telemetry:
+  Name: user-rpc
+  Endpoint: http://jaeger:14268/api/traces
+  Sampler: 1.0
+  Batcher: jaeger
+
+Mysql:
+  Url: "root:test123456@tcp(127.0.0.1:13306/wechat-merchant)"
