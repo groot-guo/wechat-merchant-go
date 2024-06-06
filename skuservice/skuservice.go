@@ -16,6 +16,9 @@ type (
 	CommonRsp            = sku.CommonRsp
 	CreateOrUpdateSkuReq = sku.CreateOrUpdateSkuReq
 	SkuInfo              = sku.SkuInfo
+	SkuInventoryInfo     = sku.SkuInventoryInfo
+	SkuInventoryReq      = sku.SkuInventoryReq
+	SkuInventoryResp     = sku.SkuInventoryResp
 	SkuReq               = sku.SkuReq
 	SkuResp              = sku.SkuResp
 
@@ -23,6 +26,7 @@ type (
 		GetSkuInfo(ctx context.Context, in *SkuReq, opts ...grpc.CallOption) (*SkuResp, error)
 		CreateSkuInfo(ctx context.Context, in *CreateOrUpdateSkuReq, opts ...grpc.CallOption) (*CommonRsp, error)
 		Update(ctx context.Context, in *CreateOrUpdateSkuReq, opts ...grpc.CallOption) (*CommonRsp, error)
+		GetSkuInventoryInfo(ctx context.Context, in *SkuInventoryReq, opts ...grpc.CallOption) (*SkuInventoryResp, error)
 	}
 
 	defaultSkuService struct {
@@ -49,4 +53,9 @@ func (m *defaultSkuService) CreateSkuInfo(ctx context.Context, in *CreateOrUpdat
 func (m *defaultSkuService) Update(ctx context.Context, in *CreateOrUpdateSkuReq, opts ...grpc.CallOption) (*CommonRsp, error) {
 	client := sku.NewSkuServiceClient(m.cli.Conn())
 	return client.Update(ctx, in, opts...)
+}
+
+func (m *defaultSkuService) GetSkuInventoryInfo(ctx context.Context, in *SkuInventoryReq, opts ...grpc.CallOption) (*SkuInventoryResp, error) {
+	client := sku.NewSkuServiceClient(m.cli.Conn())
+	return client.GetSkuInventoryInfo(ctx, in, opts...)
 }

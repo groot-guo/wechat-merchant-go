@@ -36,3 +36,8 @@ func (s *SkuServiceServer) Update(ctx context.Context, in *sku.CreateOrUpdateSku
 	l := logic.NewUpdateLogic(ctx, s.svcCtx)
 	return l.Update(in)
 }
+
+func (s *SkuServiceServer) GetSkuInventoryInfo(ctx context.Context, in *sku.SkuInventoryReq) (*sku.SkuInventoryResp, error) {
+	l := logic.NewGetSkuInventoryInfoLogic(ctx, s.svcCtx)
+	return l.GetSkuInventoryInfo(in)
+}

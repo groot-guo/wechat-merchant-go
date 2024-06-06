@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.3.0
 // - protoc             v3.19.4
-// source: sku.proto
+// source: pb/sku.proto
 
 package sku
 
@@ -19,9 +19,10 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	SkuService_GetSkuInfo_FullMethodName    = "/sku.SkuService/GetSkuInfo"
-	SkuService_CreateSkuInfo_FullMethodName = "/sku.SkuService/CreateSkuInfo"
-	SkuService_Update_FullMethodName        = "/sku.SkuService/Update"
+	SkuService_GetSkuInfo_FullMethodName          = "/sku.SkuService/GetSkuInfo"
+	SkuService_CreateSkuInfo_FullMethodName       = "/sku.SkuService/CreateSkuInfo"
+	SkuService_Update_FullMethodName              = "/sku.SkuService/Update"
+	SkuService_GetSkuInventoryInfo_FullMethodName = "/sku.SkuService/GetSkuInventoryInfo"
 )
 
 // SkuServiceClient is the client API for SkuService service.
@@ -31,6 +32,7 @@ type SkuServiceClient interface {
 	GetSkuInfo(ctx context.Context, in *SkuReq, opts ...grpc.CallOption) (*SkuResp, error)
 	CreateSkuInfo(ctx context.Context, in *CreateOrUpdateSkuReq, opts ...grpc.CallOption) (*CommonRsp, error)
 	Update(ctx context.Context, in *CreateOrUpdateSkuReq, opts ...grpc.CallOption) (*CommonRsp, error)
+	GetSkuInventoryInfo(ctx context.Context, in *SkuInventoryReq, opts ...grpc.CallOption) (*SkuInventoryResp, error)
 }
 
 type skuServiceClient struct {
@@ -68,6 +70,15 @@ func (c *skuServiceClient) Update(ctx context.Context, in *CreateOrUpdateSkuReq,
 	return out, nil
 }
 
+func (c *skuServiceClient) GetSkuInventoryInfo(ctx context.Context, in *SkuInventoryReq, opts ...grpc.CallOption) (*SkuInventoryResp, error) {
+	out := new(SkuInventoryResp)
+	err := c.cc.Invoke(ctx, SkuService_GetSkuInventoryInfo_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // SkuServiceServer is the server API for SkuService service.
 // All implementations must embed UnimplementedSkuServiceServer
 // for forward compatibility
@@ -75,6 +86,7 @@ type SkuServiceServer interface {
 	GetSkuInfo(context.Context, *SkuReq) (*SkuResp, error)
 	CreateSkuInfo(context.Context, *CreateOrUpdateSkuReq) (*CommonRsp, error)
 	Update(context.Context, *CreateOrUpdateSkuReq) (*CommonRsp, error)
+	GetSkuInventoryInfo(context.Context, *SkuInventoryReq) (*SkuInventoryResp, error)
 	mustEmbedUnimplementedSkuServiceServer()
 }
 
@@ -90,6 +102,9 @@ func (UnimplementedSkuServiceServer) CreateSkuInfo(context.Context, *CreateOrUpd
 }
 func (UnimplementedSkuServiceServer) Update(context.Context, *CreateOrUpdateSkuReq) (*CommonRsp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
+}
+func (UnimplementedSkuServiceServer) GetSkuInventoryInfo(context.Context, *SkuInventoryReq) (*SkuInventoryResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetSkuInventoryInfo not implemented")
 }
 func (UnimplementedSkuServiceServer) mustEmbedUnimplementedSkuServiceServer() {}
 
@@ -158,6 +173,24 @@ func _SkuService_Update_Handler(srv interface{}, ctx context.Context, dec func(i
 	return interceptor(ctx, in, info, handler)
 }
 
+func _SkuService_GetSkuInventoryInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SkuInventoryReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SkuServiceServer).GetSkuInventoryInfo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SkuService_GetSkuInventoryInfo_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SkuServiceServer).GetSkuInventoryInfo(ctx, req.(*SkuInventoryReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // SkuService_ServiceDesc is the grpc.ServiceDesc for SkuService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -177,7 +210,11 @@ var SkuService_ServiceDesc = grpc.ServiceDesc{
 			MethodName: "Update",
 			Handler:    _SkuService_Update_Handler,
 		},
+		{
+			MethodName: "GetSkuInventoryInfo",
+			Handler:    _SkuService_GetSkuInventoryInfo_Handler,
+		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "sku.proto",
+	Metadata: "pb/sku.proto",
 }
