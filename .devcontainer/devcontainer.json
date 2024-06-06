@@ -1,0 +1,19 @@
+{
+  "name": "werchat-merchant-go",
+
+  "image": "golang:1.19.13",
+
+  "runArgs": ["--name=wechat-merchant-go"],
+
+  "remoteUser": "root",
+
+  "containerUser": "root",
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "xiaoxin-technology.goctl"
+      ]
+    }
+  }
+}
