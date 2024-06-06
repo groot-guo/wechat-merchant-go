@@ -1,0 +1,46 @@
+syntax = "proto3";
+option go_package = "./sku";
+
+package sku;
+
+message CommonRsp {
+  uint64 code = 1;
+  string msg = 2;
+}
+
+
+message SkuReq {
+  string sku_id = 1;
+  string sku_name = 2;
+  string sku_image = 3;
+  string sku_count = 4;
+  uint64 ctime = 5;
+  uint64 mtime = 6;
+}
+
+message SkuResp {
+  CommonRsp common = 1;
+  repeated SkuInfo data = 2;
+}
+
+message SkuInfo {
+  string sku_id = 1;
+  string sku_name = 2;
+  string sku_image = 3;
+  string sku_count = 4;
+  uint64 ctime = 5;
+  uint64 mtime = 6;
+}
+
+message CreateOrUpdateSkuReq {
+  string sku_id = 1;
+  string sku_name = 2;
+  string sku_image = 3;
+  string sku_count = 4;
+}
+
+service SkuService {
+  rpc GetSkuInfo(SkuReq) returns (SkuResp);
+  rpc CreateSkuInfo(CreateOrUpdateSkuReq) returns (CommonRsp);
+  rpc Update(CreateOrUpdateSkuReq) returns (CommonRsp);
+}
