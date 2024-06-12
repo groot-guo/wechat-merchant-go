@@ -44,7 +44,7 @@ message CreateOrUpdateSkuReq {
 }
 
 message SkuInventoryReq {
-  string sku_id = 1;
+  repeated string sku_id = 1;
 }
 
 message SkuInventoryResp {
