@@ -11,7 +11,7 @@ type SkuInfoTab struct {
 	ID           uint64 `gorm:"column:id;primaryKey;autoIncrement:true" json:"id"`
 	SkuID        string `gorm:"column:sku_id;not null" json:"sku_id"`
 	SkuName      string `gorm:"column:sku_name;not null" json:"sku_name"`
-	ItemID       int32  `gorm:"column:item_id;not null" json:"item_id"`
+	ItemID       uint32 `gorm:"column:item_id;not null" json:"item_id"`
 	ItemName     string `gorm:"column:item_name;not null" json:"item_name"`
 	ProductID    uint32 `gorm:"column:product_id;not null" json:"product_id"`
 	ProductName  string `gorm:"column:product_name;not null" json:"product_name"`

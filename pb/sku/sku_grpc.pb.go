@@ -19,10 +19,8 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	SkuService_GetSkuInfo_FullMethodName          = "/sku.SkuService/GetSkuInfo"
-	SkuService_CreateSkuInfo_FullMethodName       = "/sku.SkuService/CreateSkuInfo"
-	SkuService_Update_FullMethodName              = "/sku.SkuService/Update"
-	SkuService_GetSkuInventoryInfo_FullMethodName = "/sku.SkuService/GetSkuInventoryInfo"
+	SkuService_GetSkuInfo_FullMethodName    = "/sku.SkuService/GetSkuInfo"
+	SkuService_CreateSkuInfo_FullMethodName = "/sku.SkuService/CreateSkuInfo"
 )
 
 // SkuServiceClient is the client API for SkuService service.
@@ -30,9 +28,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type SkuServiceClient interface {
 	GetSkuInfo(ctx context.Context, in *SkuReq, opts ...grpc.CallOption) (*SkuResp, error)
-	CreateSkuInfo(ctx context.Context, in *CreateOrUpdateSkuReq, opts ...grpc.CallOption) (*CommonRsp, error)
-	Update(ctx context.Context, in *CreateOrUpdateSkuReq, opts ...grpc.CallOption) (*CommonRsp, error)
-	GetSkuInventoryInfo(ctx context.Context, in *SkuInventoryReq, opts ...grpc.CallOption) (*SkuInventoryResp, error)
+	CreateSkuInfo(ctx context.Context, in *CreateSkuReq, opts ...grpc.CallOption) (*CommonRsp, error)
 }
 
 type skuServiceClient struct {
@@ -52,27 +48,9 @@ func (c *skuServiceClient) GetSkuInfo(ctx context.Context, in *SkuReq, opts ...g
 	return out, nil
 }
 
-func (c *skuServiceClient) CreateSkuInfo(ctx context.Context, in *CreateOrUpdateSkuReq, opts ...grpc.CallOption) (*CommonRsp, error) {
+func (c *skuServiceClient) CreateSkuInfo(ctx context.Context, in *CreateSkuReq, opts ...grpc.CallOption) (*CommonRsp, error) {
 	out := new(CommonRsp)
 	err := c.cc.Invoke(ctx, SkuService_CreateSkuInfo_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *skuServiceClient) Update(ctx context.Context, in *CreateOrUpdateSkuReq, opts ...grpc.CallOption) (*CommonRsp, error) {
-	out := new(CommonRsp)
-	err := c.cc.Invoke(ctx, SkuService_Update_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *skuServiceClient) GetSkuInventoryInfo(ctx context.Context, in *SkuInventoryReq, opts ...grpc.CallOption) (*SkuInventoryResp, error) {
-	out := new(SkuInventoryResp)
-	err := c.cc.Invoke(ctx, SkuService_GetSkuInventoryInfo_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -84,9 +62,7 @@ func (c *skuServiceClient) GetSkuInventoryInfo(ctx context.Context, in *SkuInven
 // for forward compatibility
 type SkuServiceServer interface {
 	GetSkuInfo(context.Context, *SkuReq) (*SkuResp, error)
-	CreateSkuInfo(context.Context, *CreateOrUpdateSkuReq) (*CommonRsp, error)
-	Update(context.Context, *CreateOrUpdateSkuReq) (*CommonRsp, error)
-	GetSkuInventoryInfo(context.Context, *SkuInventoryReq) (*SkuInventoryResp, error)
+	CreateSkuInfo(context.Context, *CreateSkuReq) (*CommonRsp, error)
 	mustEmbedUnimplementedSkuServiceServer()
 }
 
@@ -97,14 +73,8 @@ type UnimplementedSkuServiceServer struct {
 func (UnimplementedSkuServiceServer) GetSkuInfo(context.Context, *SkuReq) (*SkuResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetSkuInfo not implemented")
 }
-func (UnimplementedSkuServiceServer) CreateSkuInfo(context.Context, *CreateOrUpdateSkuReq) (*CommonRsp, error) {
+func (UnimplementedSkuServiceServer) CreateSkuInfo(context.Context, *CreateSkuReq) (*CommonRsp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateSkuInfo not implemented")
-}
-func (UnimplementedSkuServiceServer) Update(context.Context, *CreateOrUpdateSkuReq) (*CommonRsp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
-}
-func (UnimplementedSkuServiceServer) GetSkuInventoryInfo(context.Context, *SkuInventoryReq) (*SkuInventoryResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetSkuInventoryInfo not implemented")
 }
 func (UnimplementedSkuServiceServer) mustEmbedUnimplementedSkuServiceServer() {}
 
@@ -138,7 +108,7 @@ func _SkuService_GetSkuInfo_Handler(srv interface{}, ctx context.Context, dec fu
 }
 
 func _SkuService_CreateSkuInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreateOrUpdateSkuReq)
+	in := new(CreateSkuReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -150,43 +120,7 @@ func _SkuService_CreateSkuInfo_Handler(srv interface{}, ctx context.Context, dec
 		FullMethod: SkuService_CreateSkuInfo_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SkuServiceServer).CreateSkuInfo(ctx, req.(*CreateOrUpdateSkuReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _SkuService_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreateOrUpdateSkuReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(SkuServiceServer).Update(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: SkuService_Update_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SkuServiceServer).Update(ctx, req.(*CreateOrUpdateSkuReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _SkuService_GetSkuInventoryInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SkuInventoryReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(SkuServiceServer).GetSkuInventoryInfo(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: SkuService_GetSkuInventoryInfo_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SkuServiceServer).GetSkuInventoryInfo(ctx, req.(*SkuInventoryReq))
+		return srv.(SkuServiceServer).CreateSkuInfo(ctx, req.(*CreateSkuReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -206,13 +140,460 @@ var SkuService_ServiceDesc = grpc.ServiceDesc{
 			MethodName: "CreateSkuInfo",
 			Handler:    _SkuService_CreateSkuInfo_Handler,
 		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "pb/sku.proto",
+}
+
+const (
+	ItemService_GetItemInfo_FullMethodName    = "/sku.ItemService/GetItemInfo"
+	ItemService_CreateItemInfo_FullMethodName = "/sku.ItemService/CreateItemInfo"
+	ItemService_UpdateItemInfo_FullMethodName = "/sku.ItemService/UpdateItemInfo"
+)
+
+// ItemServiceClient is the client API for ItemService service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+type ItemServiceClient interface {
+	GetItemInfo(ctx context.Context, in *GetItemInfoReq, opts ...grpc.CallOption) (*CommonRsp, error)
+	CreateItemInfo(ctx context.Context, in *CreateOrUpdateItemInfoReq, opts ...grpc.CallOption) (*CommonRsp, error)
+	UpdateItemInfo(ctx context.Context, in *CreateOrUpdateItemInfoReq, opts ...grpc.CallOption) (*CommonRsp, error)
+}
+
+type itemServiceClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewItemServiceClient(cc grpc.ClientConnInterface) ItemServiceClient {
+	return &itemServiceClient{cc}
+}
+
+func (c *itemServiceClient) GetItemInfo(ctx context.Context, in *GetItemInfoReq, opts ...grpc.CallOption) (*CommonRsp, error) {
+	out := new(CommonRsp)
+	err := c.cc.Invoke(ctx, ItemService_GetItemInfo_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *itemServiceClient) CreateItemInfo(ctx context.Context, in *CreateOrUpdateItemInfoReq, opts ...grpc.CallOption) (*CommonRsp, error) {
+	out := new(CommonRsp)
+	err := c.cc.Invoke(ctx, ItemService_CreateItemInfo_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *itemServiceClient) UpdateItemInfo(ctx context.Context, in *CreateOrUpdateItemInfoReq, opts ...grpc.CallOption) (*CommonRsp, error) {
+	out := new(CommonRsp)
+	err := c.cc.Invoke(ctx, ItemService_UpdateItemInfo_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// ItemServiceServer is the server API for ItemService service.
+// All implementations must embed UnimplementedItemServiceServer
+// for forward compatibility
+type ItemServiceServer interface {
+	GetItemInfo(context.Context, *GetItemInfoReq) (*CommonRsp, error)
+	CreateItemInfo(context.Context, *CreateOrUpdateItemInfoReq) (*CommonRsp, error)
+	UpdateItemInfo(context.Context, *CreateOrUpdateItemInfoReq) (*CommonRsp, error)
+	mustEmbedUnimplementedItemServiceServer()
+}
+
+// UnimplementedItemServiceServer must be embedded to have forward compatible implementations.
+type UnimplementedItemServiceServer struct {
+}
+
+func (UnimplementedItemServiceServer) GetItemInfo(context.Context, *GetItemInfoReq) (*CommonRsp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetItemInfo not implemented")
+}
+func (UnimplementedItemServiceServer) CreateItemInfo(context.Context, *CreateOrUpdateItemInfoReq) (*CommonRsp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateItemInfo not implemented")
+}
+func (UnimplementedItemServiceServer) UpdateItemInfo(context.Context, *CreateOrUpdateItemInfoReq) (*CommonRsp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateItemInfo not implemented")
+}
+func (UnimplementedItemServiceServer) mustEmbedUnimplementedItemServiceServer() {}
+
+// UnsafeItemServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to ItemServiceServer will
+// result in compilation errors.
+type UnsafeItemServiceServer interface {
+	mustEmbedUnimplementedItemServiceServer()
+}
+
+func RegisterItemServiceServer(s grpc.ServiceRegistrar, srv ItemServiceServer) {
+	s.RegisterService(&ItemService_ServiceDesc, srv)
+}
+
+func _ItemService_GetItemInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetItemInfoReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ItemServiceServer).GetItemInfo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ItemService_GetItemInfo_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ItemServiceServer).GetItemInfo(ctx, req.(*GetItemInfoReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ItemService_CreateItemInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateOrUpdateItemInfoReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ItemServiceServer).CreateItemInfo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ItemService_CreateItemInfo_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ItemServiceServer).CreateItemInfo(ctx, req.(*CreateOrUpdateItemInfoReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ItemService_UpdateItemInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateOrUpdateItemInfoReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ItemServiceServer).UpdateItemInfo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ItemService_UpdateItemInfo_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ItemServiceServer).UpdateItemInfo(ctx, req.(*CreateOrUpdateItemInfoReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// ItemService_ServiceDesc is the grpc.ServiceDesc for ItemService service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var ItemService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "sku.ItemService",
+	HandlerType: (*ItemServiceServer)(nil),
+	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "Update",
-			Handler:    _SkuService_Update_Handler,
+			MethodName: "GetItemInfo",
+			Handler:    _ItemService_GetItemInfo_Handler,
 		},
 		{
+			MethodName: "CreateItemInfo",
+			Handler:    _ItemService_CreateItemInfo_Handler,
+		},
+		{
+			MethodName: "UpdateItemInfo",
+			Handler:    _ItemService_UpdateItemInfo_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "pb/sku.proto",
+}
+
+const (
+	SkuInventoryService_GetSkuInventoryInfo_FullMethodName    = "/sku.SkuInventoryService/GetSkuInventoryInfo"
+	SkuInventoryService_UpdateSkuInventoryInfo_FullMethodName = "/sku.SkuInventoryService/UpdateSkuInventoryInfo"
+)
+
+// SkuInventoryServiceClient is the client API for SkuInventoryService service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+type SkuInventoryServiceClient interface {
+	GetSkuInventoryInfo(ctx context.Context, in *SkuInventoryReq, opts ...grpc.CallOption) (*SkuInventoryResp, error)
+	UpdateSkuInventoryInfo(ctx context.Context, in *UpdateSkuInventoryInfoReq, opts ...grpc.CallOption) (*CommonRsp, error)
+}
+
+type skuInventoryServiceClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewSkuInventoryServiceClient(cc grpc.ClientConnInterface) SkuInventoryServiceClient {
+	return &skuInventoryServiceClient{cc}
+}
+
+func (c *skuInventoryServiceClient) GetSkuInventoryInfo(ctx context.Context, in *SkuInventoryReq, opts ...grpc.CallOption) (*SkuInventoryResp, error) {
+	out := new(SkuInventoryResp)
+	err := c.cc.Invoke(ctx, SkuInventoryService_GetSkuInventoryInfo_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *skuInventoryServiceClient) UpdateSkuInventoryInfo(ctx context.Context, in *UpdateSkuInventoryInfoReq, opts ...grpc.CallOption) (*CommonRsp, error) {
+	out := new(CommonRsp)
+	err := c.cc.Invoke(ctx, SkuInventoryService_UpdateSkuInventoryInfo_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// SkuInventoryServiceServer is the server API for SkuInventoryService service.
+// All implementations must embed UnimplementedSkuInventoryServiceServer
+// for forward compatibility
+type SkuInventoryServiceServer interface {
+	GetSkuInventoryInfo(context.Context, *SkuInventoryReq) (*SkuInventoryResp, error)
+	UpdateSkuInventoryInfo(context.Context, *UpdateSkuInventoryInfoReq) (*CommonRsp, error)
+	mustEmbedUnimplementedSkuInventoryServiceServer()
+}
+
+// UnimplementedSkuInventoryServiceServer must be embedded to have forward compatible implementations.
+type UnimplementedSkuInventoryServiceServer struct {
+}
+
+func (UnimplementedSkuInventoryServiceServer) GetSkuInventoryInfo(context.Context, *SkuInventoryReq) (*SkuInventoryResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetSkuInventoryInfo not implemented")
+}
+func (UnimplementedSkuInventoryServiceServer) UpdateSkuInventoryInfo(context.Context, *UpdateSkuInventoryInfoReq) (*CommonRsp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateSkuInventoryInfo not implemented")
+}
+func (UnimplementedSkuInventoryServiceServer) mustEmbedUnimplementedSkuInventoryServiceServer() {}
+
+// UnsafeSkuInventoryServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to SkuInventoryServiceServer will
+// result in compilation errors.
+type UnsafeSkuInventoryServiceServer interface {
+	mustEmbedUnimplementedSkuInventoryServiceServer()
+}
+
+func RegisterSkuInventoryServiceServer(s grpc.ServiceRegistrar, srv SkuInventoryServiceServer) {
+	s.RegisterService(&SkuInventoryService_ServiceDesc, srv)
+}
+
+func _SkuInventoryService_GetSkuInventoryInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SkuInventoryReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SkuInventoryServiceServer).GetSkuInventoryInfo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SkuInventoryService_GetSkuInventoryInfo_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SkuInventoryServiceServer).GetSkuInventoryInfo(ctx, req.(*SkuInventoryReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SkuInventoryService_UpdateSkuInventoryInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateSkuInventoryInfoReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SkuInventoryServiceServer).UpdateSkuInventoryInfo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SkuInventoryService_UpdateSkuInventoryInfo_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SkuInventoryServiceServer).UpdateSkuInventoryInfo(ctx, req.(*UpdateSkuInventoryInfoReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// SkuInventoryService_ServiceDesc is the grpc.ServiceDesc for SkuInventoryService service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var SkuInventoryService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "sku.SkuInventoryService",
+	HandlerType: (*SkuInventoryServiceServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
 			MethodName: "GetSkuInventoryInfo",
-			Handler:    _SkuService_GetSkuInventoryInfo_Handler,
+			Handler:    _SkuInventoryService_GetSkuInventoryInfo_Handler,
+		},
+		{
+			MethodName: "UpdateSkuInventoryInfo",
+			Handler:    _SkuInventoryService_UpdateSkuInventoryInfo_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "pb/sku.proto",
+}
+
+const (
+	ShopService_GetShopInfo_FullMethodName    = "/sku.ShopService/GetShopInfo"
+	ShopService_CreateShopInfo_FullMethodName = "/sku.ShopService/CreateShopInfo"
+	ShopService_UpdateShopInfo_FullMethodName = "/sku.ShopService/UpdateShopInfo"
+)
+
+// ShopServiceClient is the client API for ShopService service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+type ShopServiceClient interface {
+	GetShopInfo(ctx context.Context, in *GetShopInfoReq, opts ...grpc.CallOption) (*GetShopInfoResp, error)
+	CreateShopInfo(ctx context.Context, in *CreateShopReq, opts ...grpc.CallOption) (*CommonRsp, error)
+	UpdateShopInfo(ctx context.Context, in *UpdateShopReq, opts ...grpc.CallOption) (*CommonRsp, error)
+}
+
+type shopServiceClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewShopServiceClient(cc grpc.ClientConnInterface) ShopServiceClient {
+	return &shopServiceClient{cc}
+}
+
+func (c *shopServiceClient) GetShopInfo(ctx context.Context, in *GetShopInfoReq, opts ...grpc.CallOption) (*GetShopInfoResp, error) {
+	out := new(GetShopInfoResp)
+	err := c.cc.Invoke(ctx, ShopService_GetShopInfo_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *shopServiceClient) CreateShopInfo(ctx context.Context, in *CreateShopReq, opts ...grpc.CallOption) (*CommonRsp, error) {
+	out := new(CommonRsp)
+	err := c.cc.Invoke(ctx, ShopService_CreateShopInfo_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *shopServiceClient) UpdateShopInfo(ctx context.Context, in *UpdateShopReq, opts ...grpc.CallOption) (*CommonRsp, error) {
+	out := new(CommonRsp)
+	err := c.cc.Invoke(ctx, ShopService_UpdateShopInfo_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// ShopServiceServer is the server API for ShopService service.
+// All implementations must embed UnimplementedShopServiceServer
+// for forward compatibility
+type ShopServiceServer interface {
+	GetShopInfo(context.Context, *GetShopInfoReq) (*GetShopInfoResp, error)
+	CreateShopInfo(context.Context, *CreateShopReq) (*CommonRsp, error)
+	UpdateShopInfo(context.Context, *UpdateShopReq) (*CommonRsp, error)
+	mustEmbedUnimplementedShopServiceServer()
+}
+
+// UnimplementedShopServiceServer must be embedded to have forward compatible implementations.
+type UnimplementedShopServiceServer struct {
+}
+
+func (UnimplementedShopServiceServer) GetShopInfo(context.Context, *GetShopInfoReq) (*GetShopInfoResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetShopInfo not implemented")
+}
+func (UnimplementedShopServiceServer) CreateShopInfo(context.Context, *CreateShopReq) (*CommonRsp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateShopInfo not implemented")
+}
+func (UnimplementedShopServiceServer) UpdateShopInfo(context.Context, *UpdateShopReq) (*CommonRsp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateShopInfo not implemented")
+}
+func (UnimplementedShopServiceServer) mustEmbedUnimplementedShopServiceServer() {}
+
+// UnsafeShopServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to ShopServiceServer will
+// result in compilation errors.
+type UnsafeShopServiceServer interface {
+	mustEmbedUnimplementedShopServiceServer()
+}
+
+func RegisterShopServiceServer(s grpc.ServiceRegistrar, srv ShopServiceServer) {
+	s.RegisterService(&ShopService_ServiceDesc, srv)
+}
+
+func _ShopService_GetShopInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetShopInfoReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ShopServiceServer).GetShopInfo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ShopService_GetShopInfo_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ShopServiceServer).GetShopInfo(ctx, req.(*GetShopInfoReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ShopService_CreateShopInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateShopReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ShopServiceServer).CreateShopInfo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ShopService_CreateShopInfo_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ShopServiceServer).CreateShopInfo(ctx, req.(*CreateShopReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ShopService_UpdateShopInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateShopReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ShopServiceServer).UpdateShopInfo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ShopService_UpdateShopInfo_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ShopServiceServer).UpdateShopInfo(ctx, req.(*UpdateShopReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// ShopService_ServiceDesc is the grpc.ServiceDesc for ShopService service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var ShopService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "sku.ShopService",
+	HandlerType: (*ShopServiceServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "GetShopInfo",
+			Handler:    _ShopService_GetShopInfo_Handler,
+		},
+		{
+			MethodName: "CreateShopInfo",
+			Handler:    _ShopService_CreateShopInfo_Handler,
+		},
+		{
+			MethodName: "UpdateShopInfo",
+			Handler:    _ShopService_UpdateShopInfo_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

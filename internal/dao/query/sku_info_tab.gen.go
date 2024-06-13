@@ -30,7 +30,7 @@ func newSkuInfoTab(db *gorm.DB, opts ...gen.DOOption) skuInfoTab {
 	_skuInfoTab.ID = field.NewUint64(tableName, "id")
 	_skuInfoTab.SkuID = field.NewString(tableName, "sku_id")
 	_skuInfoTab.SkuName = field.NewString(tableName, "sku_name")
-	_skuInfoTab.ItemID = field.NewInt32(tableName, "item_id")
+	_skuInfoTab.ItemID = field.NewUint32(tableName, "item_id")
 	_skuInfoTab.ItemName = field.NewString(tableName, "item_name")
 	_skuInfoTab.ProductID = field.NewUint32(tableName, "product_id")
 	_skuInfoTab.ProductName = field.NewString(tableName, "product_name")
@@ -52,7 +52,7 @@ type skuInfoTab struct {
 	ID           field.Uint64
 	SkuID        field.String
 	SkuName      field.String
-	ItemID       field.Int32
+	ItemID       field.Uint32
 	ItemName     field.String
 	ProductID    field.Uint32
 	ProductName  field.String
@@ -80,7 +80,7 @@ func (s *skuInfoTab) updateTableName(table string) *skuInfoTab {
 	s.ID = field.NewUint64(table, "id")
 	s.SkuID = field.NewString(table, "sku_id")
 	s.SkuName = field.NewString(table, "sku_name")
-	s.ItemID = field.NewInt32(table, "item_id")
+	s.ItemID = field.NewUint32(table, "item_id")
 	s.ItemName = field.NewString(table, "item_name")
 	s.ProductID = field.NewUint32(table, "product_id")
 	s.ProductName = field.NewString(table, "product_name")
