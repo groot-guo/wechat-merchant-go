@@ -8,7 +8,7 @@ CREATE TABLE `sku_info_tab`
     `id`            bigint(64) unsigned auto_increment primary key not null,
     `sku_id`        varchar(64) unique key                         not null default '',
     `sku_name`      varchar(256)                                   not null default '',
-    `item_id`       int(32)                                        not null default 0,
+    `item_id`       int(32) unsigned                               not null default 0,
     `item_name`     varchar(128)                                   not null default '',
     `product_id`    int(32) unsigned unique key                    not null default 0,
     `product_name`  varchar(128)                                   not null default '',
