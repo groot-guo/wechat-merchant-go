@@ -1,4 +1,4 @@
-package logic
+package itemservicelogic
 
 import (
 	"context"
@@ -9,21 +9,21 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type UpdateLogic struct {
+type GetItemInfoLogic struct {
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 	logx.Logger
 }
 
-func NewUpdateLogic(ctx context.Context, svcCtx *svc.ServiceContext) *UpdateLogic {
-	return &UpdateLogic{
+func NewGetItemInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetItemInfoLogic {
+	return &GetItemInfoLogic{
 		ctx:    ctx,
 		svcCtx: svcCtx,
 		Logger: logx.WithContext(ctx),
 	}
 }
 
-func (l *UpdateLogic) Update(in *sku.CreateOrUpdateSkuReq) (*sku.CommonRsp, error) {
+func (l *GetItemInfoLogic) GetItemInfo(in *sku.GetItemInfoReq) (*sku.CommonRsp, error) {
 	// todo: add your logic here and delete this line
 
 	return &sku.CommonRsp{}, nil

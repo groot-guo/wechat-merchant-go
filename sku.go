@@ -12,7 +12,10 @@ import (
 	"google.golang.org/grpc/reflection"
 
 	"wechat-merchant-go/internal/config"
-	"wechat-merchant-go/internal/server"
+	itemservice "wechat-merchant-go/internal/server/itemservice"
+	shopservice "wechat-merchant-go/internal/server/shopservice"
+	skuinventoryservice "wechat-merchant-go/internal/server/skuinventoryservice"
+	skuservice "wechat-merchant-go/internal/server/skuservice"
 	"wechat-merchant-go/internal/svc"
 	"wechat-merchant-go/pb/sku"
 )
@@ -31,7 +34,10 @@ func main() {
 
 	// RegisterService
 	s := zrpc.MustNewServer(c.RpcServerConf, func(grpcServer *grpc.Server) {
-		sku.RegisterSkuServiceServer(grpcServer, server.NewSkuServiceServer(ctx))
+		sku.RegisterSkuServiceServer(grpcServer, skuservice.NewSkuServiceServer(ctx))
+		sku.RegisterItemServiceServer(grpcServer, itemservice.NewItemServiceServer(ctx))
+		sku.RegisterShopServiceServer(grpcServer, shopservice.NewShopServiceServer(ctx))
+		sku.RegisterSkuInventoryServiceServer(grpcServer, skuinventoryservice.NewSkuInventoryServiceServer(ctx))
 
 		if c.Mode == service.DevMode || c.Mode == service.TestMode {
 			reflection.Register(grpcServer)

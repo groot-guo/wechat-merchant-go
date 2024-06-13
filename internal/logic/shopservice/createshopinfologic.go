@@ -1,4 +1,4 @@
-package logic
+package shopservicelogic
 
 import (
 	"context"
@@ -9,21 +9,21 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type CreateSkuInfoLogic struct {
+type CreateShopInfoLogic struct {
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 	logx.Logger
 }
 
-func NewCreateSkuInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *CreateSkuInfoLogic {
-	return &CreateSkuInfoLogic{
+func NewCreateShopInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *CreateShopInfoLogic {
+	return &CreateShopInfoLogic{
 		ctx:    ctx,
 		svcCtx: svcCtx,
 		Logger: logx.WithContext(ctx),
 	}
 }
 
-func (l *CreateSkuInfoLogic) CreateSkuInfo(in *sku.CreateOrUpdateSkuReq) (*sku.CommonRsp, error) {
+func (l *CreateShopInfoLogic) CreateShopInfo(in *sku.CreateShopReq) (*sku.CommonRsp, error) {
 	// todo: add your logic here and delete this line
 
 	return &sku.CommonRsp{}, nil
