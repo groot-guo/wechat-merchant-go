@@ -3,10 +3,10 @@ package logic
 import (
 	"context"
 
+	"github.com/zeromicro/go-zero/core/logx"
+
 	"wechat-merchant-go/internal/svc"
 	"wechat-merchant-go/pb/sku"
-
-	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type GetSkuInventoryInfoLogic struct {
@@ -24,7 +24,28 @@ func NewGetSkuInventoryInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext
 }
 
 func (l *GetSkuInventoryInfoLogic) GetSkuInventoryInfo(in *sku.SkuInventoryReq) (*sku.SkuInventoryResp, error) {
-	// todo: add your logic here and delete this line
 
-	return &sku.SkuInventoryResp{}, nil
+	u := l.svcCtx.Use.SkuInventoryTab
+	dataList, err := u.WithContext(l.ctx).Where(u.SkuID.In(in.GetSkuId()...)).Find()
+	if err != nil {
+		l.Infof("err:%v", err)
+		return nil, err
+	}
+
+	resultData := make([]*sku.SkuInventoryInfo, 0, len(dataList))
+	for _, data := range dataList {
+		resultData = append(resultData, &sku.SkuInventoryInfo{
+			SkuId:        data.SkuID,
+			InventoryQty: data.Inventory,
+			DamageQty:    data.Damage,
+		})
+	}
+
+	return &sku.SkuInventoryResp{
+		Common: &sku.CommonRsp{
+			Code: 0,
+			Msg:  "ok",
+		},
+		Data: resultData,
+	}, nil
 }
