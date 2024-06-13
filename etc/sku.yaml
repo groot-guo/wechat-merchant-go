@@ -1,11 +1,26 @@
 Name: wechat-merchant-go
 ListenOn: 0.0.0.0:8090
-Nacos: # 本地缓存读取问题，已经 debug 日志太多
-  Host: 127.0.0.1
-  Port: 9848
-  Namespace: c2b3cfff-e8bd-4066-ae52-648a8eb6ceeb
-  Group: wechat-merchant
-#  Cluster: CLUSTER_NAME
+log:
+  servicename: wechat-merchant-product-service
+  level: debug
+  path: ./logs
+  mode: file
+etcd:
+  key: wechat-merchant-go
+  hosts:
+    - 127.0.0.1:2379
+
+#Nacos: # 本地缓存读取问题，已经 debug 日志太多
+#  Host: 127.0.0.1
+#  GrpcPort: 9848
+#  Namespace: c2b3cfff-e8bd-4066-ae52-648a8eb6ceeb
+#  Group: wechat-merchant
+#  ServiceName: wechat-merchant-go
+#  DataId: wechat-merchant-product-service
+#  Ip: 127.0.0.1 # 本地服务地址
+#  Port: 8090  # 本地服务端口
+#  Weight: 10
+#  LogLevel: info
 
 # 本地上报优先采用
 DevServer:
@@ -27,4 +42,4 @@ Telemetry:
   Batcher: jaeger
 
 Mysql:
-  Url: "root:test123456@tcp(127.0.0.1:13306/wechat-merchant)"
+  Url: "root:test123456@tcp(127.0.0.1:13306)/wechat-merchant"

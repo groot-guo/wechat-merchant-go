@@ -54,8 +54,8 @@ message SkuInventoryResp {
 
 message SkuInventoryInfo {
   string sku_id = 1;
-  uint64 inventory_qty = 2;
-  uint64 damage_qty = 3;
+  uint32 inventory_qty = 2;
+  uint32 damage_qty = 3;
 }
 
 service SkuService {
