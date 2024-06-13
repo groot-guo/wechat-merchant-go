@@ -6,7 +6,7 @@ option java_multiple_files = true; // 需要指定输出多个文件
 package sku;
 
 message CommonRsp {
-  uint64 code = 1;
+  int64 code = 1;
   string msg = 2;
 }
 
@@ -20,7 +20,7 @@ message SkuReq {
 message SkuResp {
   CommonRsp common = 1;
   repeated SkuInfo data = 2;
-  uint64 total = 3;
+  uint32 total = 3;
 }
 
 message SkuInfo {
@@ -31,16 +31,60 @@ message SkuInfo {
   string item_name = 5;
   uint32 product_id = 6;
   string product_name = 7;
-  uint64 ctime = 8;
-  uint64 mtime = 9;
+  uint32 ctime = 8;
+  uint32 mtime = 9;
 }
 
 // 此处应该还要修改
-message CreateOrUpdateSkuReq {
-  string sku_id = 1;
-  string sku_name = 2;
-  string sku_image = 3;
-  string sku_count = 4;
+message CreateSkuReq {
+  string item_id = 1;
+  string item_nam = 2;
+  string product_id = 3;
+  string product_name = 4;
+  uint32 inventory_qty = 5;
+}
+
+// sku service
+service SkuService {
+  rpc GetSkuInfo(SkuReq) returns (SkuResp);
+  rpc CreateSkuInfo(CreateSkuReq) returns (CommonRsp);
+}
+
+message GetItemInfoReq {
+  uint32 item_id = 1;
+  string item_name = 2;
+  uint32 category_id = 3;
+  string category_name = 4;
+  uint32 shop_id = 5;
+}
+
+message GetItemInfoResp {
+  CommonRsp common = 1;
+  repeated ItemInfo data = 2;
+  uint32 total = 3;
+}
+
+message ItemInfo {
+  uint32 item_id = 1;
+  string item_name = 2;
+  uint32 category_id = 3;
+  string category_name = 4;
+  uint32 shop_id = 5;
+}
+
+message CreateOrUpdateItemInfoReq {
+  uint32 item_id = 1;
+  string item_name = 2;
+  uint32 category_id = 3;
+  string category_nam = 4;
+  uint32 shop_id = 5;
+}
+
+// item service
+service ItemService {
+  rpc GetItemInfo(GetItemInfoReq) returns (CommonRsp);
+  rpc CreateItemInfo(CreateOrUpdateItemInfoReq) returns (CommonRsp);
+  rpc UpdateItemInfo(CreateOrUpdateItemInfoReq) returns (CommonRsp);
 }
 
 message SkuInventoryReq {
@@ -58,9 +102,41 @@ message SkuInventoryInfo {
   uint32 damage_qty = 3;
 }
 
-service SkuService {
-  rpc GetSkuInfo(SkuReq) returns (SkuResp);
-  rpc CreateSkuInfo(CreateOrUpdateSkuReq) returns (CommonRsp);
-  rpc Update(CreateOrUpdateSkuReq) returns (CommonRsp);
+message UpdateSkuInventoryInfoReq {
+  string sku_id = 1;
+  uint32 inventory_qty = 2;
+  uint32 damage_qty = 3;
+}
+
+// sku inventory service
+service SkuInventoryService {
   rpc GetSkuInventoryInfo(SkuInventoryReq) returns (SkuInventoryResp);
+  rpc UpdateSkuInventoryInfo(UpdateSkuInventoryInfoReq) returns (CommonRsp);
+}
+
+message GetShopInfoReq {
+  uint32 shop_id = 1;
+  string shop_name = 2;
+}
+
+message GetShopInfoResp {
+  CommonRsp common = 1;
+  uint32 shop_id = 2;
+  string shop_name = 3;
+}
+
+message CreateShopReq {
+  uint32 shop_id = 1;
+  string shop_name = 2;
+}
+
+message UpdateShopReq{
+  uint32 shop_id = 1;
+  string shop_name = 2;
+}
+
+service ShopService {
+  rpc GetShopInfo(GetShopInfoReq) returns (GetShopInfoResp);
+  rpc CreateShopInfo(CreateShopReq) returns (CommonRsp);
+  rpc UpdateShopInfo(UpdateShopReq) returns (CommonRsp);
 }
