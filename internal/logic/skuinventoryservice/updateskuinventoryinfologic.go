@@ -2,11 +2,12 @@ package skuinventoryservicelogic
 
 import (
 	"context"
+	"errors"
+
+	"github.com/zeromicro/go-zero/core/logx"
 
 	"wechat-merchant-go/internal/svc"
 	"wechat-merchant-go/pb/sku"
-
-	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type UpdateSkuInventoryInfoLogic struct {
@@ -24,7 +25,22 @@ func NewUpdateSkuInventoryInfoLogic(ctx context.Context, svcCtx *svc.ServiceCont
 }
 
 func (l *UpdateSkuInventoryInfoLogic) UpdateSkuInventoryInfo(in *sku.UpdateSkuInventoryInfoReq) (*sku.CommonRsp, error) {
-	// todo: add your logic here and delete this line
+	if in.GetSkuId() == "" {
+		return nil, errors.New("skuId is empty")
+	}
+	if in.GetInventoryQty() < 0 {
+		return nil, errors.New("inventoryQty is negative")
+	}
 
-	return &sku.CommonRsp{}, nil
+	u := l.svcCtx.Use.SkuInventoryTab
+	result, err := u.WithContext(l.ctx).Where(u.SkuID.Eq(in.GetSkuId())).Update(u.Inventory, in.GetInventoryQty())
+	if err != nil {
+		l.Errorf("UpdateSkuInventoryInfo error: %v", err)
+		return nil, err
+	}
+	l.Infof("UpdateSkuInventoryInfo: %v", result)
+	return &sku.CommonRsp{
+		Code: 0,
+		Msg:  "success",
+	}, nil
 }

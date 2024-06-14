@@ -3,10 +3,10 @@ package skuinventoryservicelogic
 import (
 	"context"
 
+	"github.com/zeromicro/go-zero/core/logx"
+
 	"wechat-merchant-go/internal/svc"
 	"wechat-merchant-go/pb/sku"
-
-	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type GetSkuInventoryInfoLogic struct {
@@ -51,7 +51,7 @@ func (l *GetSkuInventoryInfoLogic) GetSkuInventoryInfo(in *sku.SkuInventoryReq) 
 	return &sku.SkuInventoryResp{
 		Common: &sku.CommonRsp{
 			Code: 0,
-			Msg:  "ok",
+			Msg:  "success",
 		},
 		Data: resultData,
 	}, nil
