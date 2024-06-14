@@ -23,8 +23,8 @@ func NewGetItemInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetIt
 	}
 }
 
-func (l *GetItemInfoLogic) GetItemInfo(in *sku.GetItemInfoReq) (*sku.CommonRsp, error) {
+func (l *GetItemInfoLogic) GetItemInfo(in *sku.GetItemInfoReq) (*sku.GetItemInfoResp, error) {
 	// todo: add your logic here and delete this line
 
-	return &sku.CommonRsp{}, nil
+	return &sku.GetItemInfoResp{}, nil
 }
