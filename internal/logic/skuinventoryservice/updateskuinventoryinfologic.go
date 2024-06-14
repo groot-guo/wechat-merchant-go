@@ -33,6 +33,14 @@ func (l *UpdateSkuInventoryInfoLogic) UpdateSkuInventoryInfo(in *sku.UpdateSkuIn
 	}
 
 	u := l.svcCtx.Use.SkuInventoryTab
+	data, err := u.WithContext(l.ctx).Where(u.SkuID.Eq(in.GetSkuId())).First()
+	if err != nil {
+		return nil, err
+	}
+	if data.Inventory < in.GetInventoryQty() {
+		return nil, errors.New("inventory is over")
+	}
+
 	result, err := u.WithContext(l.ctx).Where(u.SkuID.Eq(in.GetSkuId())).Update(u.Inventory, in.GetInventoryQty())
 	if err != nil {
 		l.Errorf("UpdateSkuInventoryInfo error: %v", err)
