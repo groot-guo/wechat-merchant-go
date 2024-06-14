@@ -2,11 +2,12 @@ package shopservicelogic
 
 import (
 	"context"
+	"errors"
+
+	"github.com/zeromicro/go-zero/core/logx"
 
 	"wechat-merchant-go/internal/svc"
 	"wechat-merchant-go/pb/sku"
-
-	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type UpdateShopInfoLogic struct {
@@ -24,7 +25,20 @@ func NewUpdateShopInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Up
 }
 
 func (l *UpdateShopInfoLogic) UpdateShopInfo(in *sku.UpdateShopReq) (*sku.CommonRsp, error) {
-	// todo: add your logic here and delete this line
+	if in.GetShopId() == 0 || in.GetShopName() == "" {
+		return nil, errors.New("params error")
+	}
 
-	return &sku.CommonRsp{}, nil
+	u := l.svcCtx.Use.ShopInfoTab
+	result, err := u.WithContext(l.ctx).Where(u.ShopID.Eq(in.GetShopId())).Update(u.ShopName, in.GetShopName())
+	if err != nil {
+		l.Errorf("UpdateShopInfo err:%v", err)
+		return nil, err
+	}
+
+	l.Infof("UpdateShopInfo result: %v", result)
+	return &sku.CommonRsp{
+		Code: 0,
+		Msg:  "success",
+	}, nil
 }
