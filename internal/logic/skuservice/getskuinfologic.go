@@ -45,7 +45,7 @@ func (l *GetSkuInfoLogic) GetSkuInfo(in *sku.SkuReq) (*sku.SkuResp, error) {
 	u := l.svcCtx.Use.SkuInfoTab
 	limit := in.GetPageSize()
 	offset := (in.GetPageNumber() - 1) * limit
-	dataList, err := u.WithContext(l.ctx).Where(u.SkuID.In(in.GetSkuId()...)).Limit(int(limit)).Offset(int(offset)).Find()
+	dataList, total, err := u.WithContext(l.ctx).Where(u.SkuID.In(in.GetSkuId()...)).FindByPage(int(limit), int(offset))
 	if err != nil {
 		l.Errorf("err:%+v", err)
 		return nil, err
@@ -70,8 +70,9 @@ func (l *GetSkuInfoLogic) GetSkuInfo(in *sku.SkuReq) (*sku.SkuResp, error) {
 	return &sku.SkuResp{
 		Common: &sku.CommonRsp{
 			Code: 0,
-			Msg:  "ok",
+			Msg:  "success",
 		},
-		Data: resultList,
+		Data:  resultList,
+		Total: uint32(total),
 	}, nil
 }
