@@ -22,7 +22,7 @@ func NewItemServiceServer(svcCtx *svc.ServiceContext) *ItemServiceServer {
 	}
 }
 
-func (s *ItemServiceServer) GetItemInfo(ctx context.Context, in *sku.GetItemInfoReq) (*sku.CommonRsp, error) {
+func (s *ItemServiceServer) GetItemInfo(ctx context.Context, in *sku.GetItemInfoReq) (*sku.GetItemInfoResp, error) {
 	l := itemservicelogic.NewGetItemInfoLogic(ctx, s.svcCtx)
 	return l.GetItemInfo(in)
 }

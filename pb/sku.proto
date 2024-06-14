@@ -82,7 +82,7 @@ message CreateOrUpdateItemInfoReq {
 
 // item service
 service ItemService {
-  rpc GetItemInfo(GetItemInfoReq) returns (CommonRsp);
+  rpc GetItemInfo(GetItemInfoReq) returns (GetItemInfoResp);
   rpc CreateItemInfo(CreateOrUpdateItemInfoReq) returns (CommonRsp);
   rpc UpdateItemInfo(CreateOrUpdateItemInfoReq) returns (CommonRsp);
 }

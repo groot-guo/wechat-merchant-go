@@ -155,7 +155,7 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ItemServiceClient interface {
-	GetItemInfo(ctx context.Context, in *GetItemInfoReq, opts ...grpc.CallOption) (*CommonRsp, error)
+	GetItemInfo(ctx context.Context, in *GetItemInfoReq, opts ...grpc.CallOption) (*GetItemInfoResp, error)
 	CreateItemInfo(ctx context.Context, in *CreateOrUpdateItemInfoReq, opts ...grpc.CallOption) (*CommonRsp, error)
 	UpdateItemInfo(ctx context.Context, in *CreateOrUpdateItemInfoReq, opts ...grpc.CallOption) (*CommonRsp, error)
 }
@@ -168,8 +168,8 @@ func NewItemServiceClient(cc grpc.ClientConnInterface) ItemServiceClient {
 	return &itemServiceClient{cc}
 }
 
-func (c *itemServiceClient) GetItemInfo(ctx context.Context, in *GetItemInfoReq, opts ...grpc.CallOption) (*CommonRsp, error) {
-	out := new(CommonRsp)
+func (c *itemServiceClient) GetItemInfo(ctx context.Context, in *GetItemInfoReq, opts ...grpc.CallOption) (*GetItemInfoResp, error) {
+	out := new(GetItemInfoResp)
 	err := c.cc.Invoke(ctx, ItemService_GetItemInfo_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -199,7 +199,7 @@ func (c *itemServiceClient) UpdateItemInfo(ctx context.Context, in *CreateOrUpda
 // All implementations must embed UnimplementedItemServiceServer
 // for forward compatibility
 type ItemServiceServer interface {
-	GetItemInfo(context.Context, *GetItemInfoReq) (*CommonRsp, error)
+	GetItemInfo(context.Context, *GetItemInfoReq) (*GetItemInfoResp, error)
 	CreateItemInfo(context.Context, *CreateOrUpdateItemInfoReq) (*CommonRsp, error)
 	UpdateItemInfo(context.Context, *CreateOrUpdateItemInfoReq) (*CommonRsp, error)
 	mustEmbedUnimplementedItemServiceServer()
@@ -209,7 +209,7 @@ type ItemServiceServer interface {
 type UnimplementedItemServiceServer struct {
 }
 
-func (UnimplementedItemServiceServer) GetItemInfo(context.Context, *GetItemInfoReq) (*CommonRsp, error) {
+func (UnimplementedItemServiceServer) GetItemInfo(context.Context, *GetItemInfoReq) (*GetItemInfoResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetItemInfo not implemented")
 }
 func (UnimplementedItemServiceServer) CreateItemInfo(context.Context, *CreateOrUpdateItemInfoReq) (*CommonRsp, error) {
