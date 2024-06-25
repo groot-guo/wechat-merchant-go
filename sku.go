@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 
+	"github.com/dtm-labs/logger"
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/core/logc"
 	"github.com/zeromicro/go-zero/core/service"
@@ -31,6 +32,7 @@ func main() {
 	ctx := svc.NewServiceContext(&c)
 
 	logc.MustSetup(c.Log)
+	logger.InitLog("debug")
 
 	// RegisterService
 	s := zrpc.MustNewServer(c.RpcServerConf, func(grpcServer *grpc.Server) {
