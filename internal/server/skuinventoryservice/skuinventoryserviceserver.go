@@ -31,3 +31,33 @@ func (s *SkuInventoryServiceServer) UpdateSkuInventoryInfo(ctx context.Context, 
 	l := skuinventoryservicelogic.NewUpdateSkuInventoryInfoLogic(ctx, s.svcCtx)
 	return l.UpdateSkuInventoryInfo(in)
 }
+
+func (s *SkuInventoryServiceServer) DeductSkuInventorySaga(ctx context.Context, in *sku.UpdateSkuInventoryInfoReq) (*sku.CommonRsp, error) {
+	l := skuinventoryservicelogic.NewDeductSkuInventorySagaLogic(ctx, s.svcCtx)
+	return l.DeductSkuInventorySaga(in)
+}
+
+func (s *SkuInventoryServiceServer) DeductSkuInventorySagaRollback(ctx context.Context, in *sku.UpdateSkuInventoryInfoReq) (*sku.CommonRsp, error) {
+	l := skuinventoryservicelogic.NewDeductSkuInventorySagaRollbackLogic(ctx, s.svcCtx)
+	return l.DeductSkuInventorySagaRollback(in)
+}
+
+func (s *SkuInventoryServiceServer) DeductSkuInventoryTccTry(ctx context.Context, in *sku.UpdateSkuInventoryInfoReq) (*sku.CommonRsp, error) {
+	l := skuinventoryservicelogic.NewDeductSkuInventoryTccTryLogic(ctx, s.svcCtx)
+	return l.DeductSkuInventoryTccTry(in)
+}
+
+func (s *SkuInventoryServiceServer) DeductSkuInventoryTccSubmit(ctx context.Context, in *sku.UpdateSkuInventoryInfoReq) (*sku.CommonRsp, error) {
+	l := skuinventoryservicelogic.NewDeductSkuInventoryTccSubmitLogic(ctx, s.svcCtx)
+	return l.DeductSkuInventoryTccSubmit(in)
+}
+
+func (s *SkuInventoryServiceServer) DeductSkuInventoryTccRollback(ctx context.Context, in *sku.UpdateSkuInventoryInfoReq) (*sku.CommonRsp, error) {
+	l := skuinventoryservicelogic.NewDeductSkuInventoryTccRollbackLogic(ctx, s.svcCtx)
+	return l.DeductSkuInventoryTccRollback(in)
+}
+
+func (s *SkuInventoryServiceServer) DeductSkuInventoryXa(ctx context.Context, in *sku.UpdateSkuInventoryInfoReq) (*sku.CommonRsp, error) {
+	l := skuinventoryservicelogic.NewDeductSkuInventoryXaLogic(ctx, s.svcCtx)
+	return l.DeductSkuInventoryXa(in)
+}

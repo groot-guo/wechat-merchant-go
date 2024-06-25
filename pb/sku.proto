@@ -1,4 +1,5 @@
 syntax = "proto3";
+
 option go_package = "./sku";
 option java_package = "com.example.wechatmerchant.skurpc";
 option java_multiple_files = true; // 需要指定输出多个文件
@@ -108,10 +109,20 @@ message UpdateSkuInventoryInfoReq {
   uint32 damage_qty = 3;
 }
 
+message Response {
+
+}
+
 // sku inventory service
 service SkuInventoryService {
   rpc GetSkuInventoryInfo(SkuInventoryReq) returns (SkuInventoryResp);
   rpc UpdateSkuInventoryInfo(UpdateSkuInventoryInfoReq) returns (CommonRsp);
+  rpc DeductSkuInventorySaga(UpdateSkuInventoryInfoReq) returns (CommonRsp);
+  rpc DeductSkuInventorySagaRollback(UpdateSkuInventoryInfoReq) returns (CommonRsp);
+  rpc DeductSkuInventoryTccTry(UpdateSkuInventoryInfoReq) returns (CommonRsp);
+  rpc DeductSkuInventoryTccSubmit(UpdateSkuInventoryInfoReq) returns (CommonRsp);
+  rpc DeductSkuInventoryTccRollback(UpdateSkuInventoryInfoReq) returns (CommonRsp);
+  rpc DeductSkuInventoryXa(UpdateSkuInventoryInfoReq) returns (CommonRsp);
 }
 
 message GetShopInfoReq {
