@@ -1,5 +1,6 @@
 Name: wechat-merchant-go
 ListenOn: 0.0.0.0:8090
+timeout: 100000
 log:
   servicename: wechat-merchant-product-service
   level: debug
@@ -42,4 +43,4 @@ Telemetry:
   Batcher: jaeger
 
 Mysql:
-  Url: "root:test123456@tcp(127.0.0.1:13306)/wechat-merchant"
+  Url: "root:test123456789@tcp(127.0.0.1:13306)/wechat_merchant"
