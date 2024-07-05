@@ -2,9 +2,9 @@ package skuinventoryservicelogic
 
 import (
 	"context"
-	"errors"
-
 	"github.com/zeromicro/go-zero/core/logx"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 
 	"wechat-merchant-go/internal/svc"
 	"wechat-merchant-go/pb/sku"
@@ -31,7 +31,7 @@ func (l *DeductSkuInventorySagaLogic) DeductSkuInventorySaga(in *sku.UpdateSkuIn
 		return nil, err
 	}
 	if data.Inventory < in.GetInventoryQty() {
-		return nil, errors.New("inventory is over")
+		return &sku.CommonRsp{}, status.New(codes.Aborted, "inventory is over").Err()
 	}
 
 	data.Inventory -= in.GetInventoryQty()
