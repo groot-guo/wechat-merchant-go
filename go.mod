@@ -3,6 +3,8 @@ module wechat-merchant-go
 go 1.19
 
 require (
+	github.com/dtm-labs/client v1.18.7
+	github.com/dtm-labs/logger v0.0.1
 	github.com/nacos-group/nacos-sdk-go/v2 v2.2.6
 	github.com/zeromicro/go-zero v1.6.5
 	google.golang.org/grpc v1.64.0
@@ -32,9 +34,7 @@ require (
 	github.com/coreos/go-systemd/v22 v22.5.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
-	github.com/dtm-labs/client v1.18.7 // indirect
 	github.com/dtm-labs/dtmdriver v0.0.6 // indirect
-	github.com/dtm-labs/logger v0.0.1 // indirect
 	github.com/emicklei/go-restful/v3 v3.11.0 // indirect
 	github.com/fatih/color v1.16.0 // indirect
 	github.com/go-logr/logr v1.3.0 // indirect
