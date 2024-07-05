@@ -3,6 +3,8 @@ package skuinventoryservicelogic
 import (
 	"context"
 	"errors"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 
 	"github.com/zeromicro/go-zero/core/logx"
 
@@ -28,7 +30,7 @@ func (l *DeductSkuInventoryTccTryLogic) DeductSkuInventoryTccTry(in *sku.UpdateS
 	u := l.svcCtx.Use.SkuInventoryTab
 	data, err := u.WithContext(l.ctx).Where(u.SkuID.Eq(in.GetSkuId())).First()
 	if err != nil {
-		return nil, err
+		return nil, status.New(codes.Aborted, "inventory is over").Err()
 	}
 	if data.Inventory < in.GetInventoryQty() {
 		return nil, errors.New("inventory is over")

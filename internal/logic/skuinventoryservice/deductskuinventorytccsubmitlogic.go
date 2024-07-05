@@ -25,15 +25,7 @@ func NewDeductSkuInventoryTccSubmitLogic(ctx context.Context, svcCtx *svc.Servic
 
 func (l *DeductSkuInventoryTccSubmitLogic) DeductSkuInventoryTccSubmit(in *sku.UpdateSkuInventoryInfoReq) (*sku.CommonRsp, error) {
 	u := l.svcCtx.Use.SkuInventoryTab
-	//data, err := u.WithContext(l.ctx).Where(u.SkuID.Eq(in.GetSkuId())).First()
-	//if err != nil {
-	//	return nil, err
-	//}
-	//if data.Inventory < in.GetInventoryQty() {
-	//	return nil, errors.New("inventory is over")
-	//}
-
-	//data.Inventory -= in.GetInventoryQty()
+	// todo 扣减逻辑真正执行的时候，目前这个需要修改
 
 	result, err := u.WithContext(l.ctx).Where(u.SkuID.Eq(in.GetSkuId())).UpdateColumnSimple(u.Inventory.Div(in.GetInventoryQty()))
 	if err != nil {
