@@ -43,4 +43,13 @@ Telemetry:
   Batcher: jaeger
 
 Mysql:
-  Url: "root:test123456789@tcp(127.0.0.1:13306)/wechat_merchant"
+  Url: "root:test123456@tcp(192.168.100.164:13306)/wechat_merchant"
+
+Dtm:
+  Driver: mysql
+  Host: 192.168.100.164
+  Port: 13306
+  User: root
+  Password: test123456789
+  Db: wechat_merchant
+  Schema:

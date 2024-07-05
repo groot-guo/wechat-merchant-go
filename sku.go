@@ -28,8 +28,9 @@ func main() {
 
 	var c config.Config
 	conf.MustLoad(*configFile, &c)
+	db := config.InitDb(c)
 
-	ctx := svc.NewServiceContext(&c)
+	ctx := svc.NewServiceContext(&c, db)
 
 	logc.MustSetup(c.Log)
 	logger.InitLog("debug")
@@ -50,4 +51,8 @@ func main() {
 
 	fmt.Printf("Starting rpc server at %s...\n", c.ListenOn)
 	s.Start()
+}
+
+func PrintSlice[T any, K any](s []T, s2 []K) {
+	// ...
 }
