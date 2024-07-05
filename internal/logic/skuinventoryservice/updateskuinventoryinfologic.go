@@ -31,44 +31,6 @@ func (l *UpdateSkuInventoryInfoLogic) UpdateSkuInventoryInfo(in *sku.UpdateSkuIn
 	if in.GetInventoryQty() < 0 {
 		return nil, errors.New("inventoryQty is negative")
 	}
-	//xa, err := dtmgrpc.XaGrpcFromRequest(l.ctx)
-	//xa.CallBranch()
-	//dtmcli.MustGenGid()
-
-	//err := dtmgrpc.XaLocalTransaction(l.ctx, dtmcli.DBConf{
-	//	Driver:   "mysql",
-	//	Host:     "127.0.0.1",
-	//	Port:     13306,
-	//	User:     "root",
-	//	Password: "test123456789",
-	//	Db:       "wechat-merchant",
-	//	Schema:   "",
-	//}, func(db *sql.DB, xa *dtmgrpc.XaGrpc) error {
-	//	gormDB, err := gorm.Open(mysql.New(mysql.Config{Conn: db}))
-	//	if err != nil {
-	//		return err
-	//	}
-	//	u := l.svcCtx.Use.ReplaceDB(gormDB).SkuInventoryTab
-	//	data, err := u.WithContext(l.ctx).Where(u.SkuID.Eq(in.GetSkuId())).First()
-	//	if err != nil {
-	//		return err
-	//	}
-	//	if data.Inventory < in.GetInventoryQty() {
-	//		return errors.New("inventory is over")
-	//	}
-	//
-	//	result, err := u.WithContext(l.ctx).Where(u.SkuID.Eq(in.GetSkuId())).Update(u.Inventory, in.GetInventoryQty())
-	//	if err != nil {
-	//		l.Errorf("UpdateSkuInventoryInfo error: %v", err)
-	//		return err
-	//	}
-	//	l.Infof("UpdateSkuInventoryInfo: %v", result)
-	//	dtmimp.OrString("", "", dtmcli.ResultSuccess)
-	//	return nil
-	//})
-	//if err != nil {
-	//	return nil, err
-	//}
 
 	u := l.svcCtx.Use.SkuInventoryTab
 	data, err := u.WithContext(l.ctx).Where(u.SkuID.Eq(in.GetSkuId())).First()

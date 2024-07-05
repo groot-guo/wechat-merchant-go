@@ -4,9 +4,9 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 
-	"github.com/dtm-labs/client/dtmcli"
-	"github.com/dtm-labs/client/dtmcli/dtmimp"
 	"github.com/dtm-labs/client/dtmgrpc"
 	"github.com/zeromicro/go-zero/core/logx"
 	"gorm.io/driver/mysql"
@@ -38,15 +38,7 @@ func (l *DeductSkuInventoryXaLogic) DeductSkuInventoryXa(in *sku.UpdateSkuInvent
 		return nil, errors.New("inventoryQty is negative")
 	}
 
-	err := dtmgrpc.XaLocalTransaction(l.ctx, dtmcli.DBConf{
-		Driver:   "mysql",
-		Host:     "127.0.0.1",
-		Port:     13306,
-		User:     "root",
-		Password: "test123456789",
-		Db:       "wechat_merchant",
-		Schema:   "",
-	}, func(db *sql.DB, xa *dtmgrpc.XaGrpc) error {
+	err := dtmgrpc.XaLocalTransaction(l.ctx, l.svcCtx.Config.Dtm, func(db *sql.DB, xa *dtmgrpc.XaGrpc) error {
 		gormDB, err := gorm.Open(mysql.New(mysql.Config{Conn: db}))
 		if err != nil {
 			return err
@@ -57,8 +49,9 @@ func (l *DeductSkuInventoryXaLogic) DeductSkuInventoryXa(in *sku.UpdateSkuInvent
 			return err
 		}
 		if data.Inventory < in.GetInventoryQty() {
-			return errors.New("inventory is over")
+			return status.New(codes.FailedPrecondition, "inventory is over").Err()
 		}
+		data.Inventory -= in.GetInventoryQty()
 
 		result, err := u.WithContext(l.ctx).Where(u.SkuID.Eq(in.GetSkuId())).Update(u.Inventory, in.GetInventoryQty())
 		if err != nil {
@@ -66,12 +59,14 @@ func (l *DeductSkuInventoryXaLogic) DeductSkuInventoryXa(in *sku.UpdateSkuInvent
 			return err
 		}
 		l.Infof("UpdateSkuInventoryInfo: %v", result)
-		dtmimp.OrString("", "", dtmcli.ResultSuccess)
 		return nil
 	})
 	if err != nil {
 		return nil, err
 	}
 
-	return &sku.CommonRsp{}, nil
+	return &sku.CommonRsp{
+		Code: 0,
+		Msg:  "success",
+	}, nil
 }
